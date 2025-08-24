@@ -4,11 +4,10 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-class SimpleCameraNode(Node):
-    """简化版摄像头节点，直接写死配置参数"""
+class CameraNode(Node):
     
     def __init__(self):
-        super().__init__('simple_camera_node')
+        super().__init__('camera_node')
         
         # 固定配置参数
         self.camera_device = 0  # 使用第一个摄像头
@@ -33,7 +32,7 @@ class SimpleCameraNode(Node):
             self.get_logger().error(f"无法打开摄像头设备 {self.camera_device}")
             return
         
-        self.get_logger().info(f"简化版摄像头节点已启动，发布图像到话题: {self.image_topic}")
+        self.get_logger().info(f"摄像头节点已启动，发布图像到话题: {self.image_topic}")
         
         # 图像计数
         self.image_count = 0
@@ -69,12 +68,12 @@ class SimpleCameraNode(Node):
         """节点销毁时释放摄像头资源"""
         if self.cap.isOpened():
             self.cap.release()
-        self.get_logger().info("简化版摄像头节点已关闭")
+        self.get_logger().info("摄像头节点已关闭")
         super().destroy_node()
 
 def main(args=None):
     rclpy.init(args=args)
-    camera_node = SimpleCameraNode()
+    camera_node = CameraNode()
     
     try:
         rclpy.spin(camera_node)
